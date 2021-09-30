@@ -14,7 +14,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 # such as whether we want to show debug information when errors happen,
 # where our HTML templates are located & which database we're going to
 # connect to. These are all controlled in the settings.py file
-
+import os
 from pathlib import Path
 import dj_database_url
 
@@ -26,12 +26,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-%0k0vv!#keivx!76zklcv9*!_a^29j$7sdlp_-^#xy_sj%$4$_'
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-%0k0vv!#keivx!76zklcv9*!_a^29j$7sdlp_-^#xy_sj%$4$_')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['christie-django-todo-app.herokuapp.com']
+ALLOWED_HOSTS = [os.environ.get('HEROKU_HOSTNAME')]
 
 
 # Application definition
@@ -90,7 +90,7 @@ WSGI_APPLICATION = 'django_todo.wsgi.application'
 # }
 
 DATABASES = {
-    'default': dj_database_url.parse('postgres://rnnsfrbvbzvnhd:a62c9df66d42f2ce340a734dfbee6a77837d6826cd93dfb6e9563359cc46c1f5@ec2-52-207-47-210.compute-1.amazonaws.com:5432/d89hfvgph1t501')
+    'default': dj_database_url.parse(os.environ.get('DATABASE_URL'))
 }
 
 # Password validation

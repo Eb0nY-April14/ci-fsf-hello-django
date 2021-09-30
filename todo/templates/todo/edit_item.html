@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Item Page</title>
+</head>
+<body>
+    <h1>Edit a Todo Item:</h1>
+    <!-- The 'action' will be our 'add URL' that we're going to submit the form to.
+    'POST' request sends/posts information to the server so we'll use it in our form 
+    since we'll be sending the data for a new todo item to the '/add' URL -->
+    <form method="POST">
+        <!-- Whenever we're posting information in Django, we must add the CSRF or cross-site 
+        request forgery token inside the opening form tag or else Django will throw an error. 
+        This token is a randomly generated unique value which will be added to the form as a 
+        hidden input field when the form is submitted & works to guarantee that the data we're 
+        posting is actually coming from our todo list app & not from another website. -->
+        {% csrf_token %}
+        <!-- '.as_p' built-in method from Django forms is used here to get our vertical styling/
+        layout back which we lost when we removed our own form elements. 'as_p' will render the 
+        fields as paragraphs & as_table which will render them as a table.  -->
+        {{ form.as_p }}
+        <!-- <div>
+            <p>
+                <label for="id_name">Name:</label>
+                 The 'name' attribute of this input tag is the name we'll use to access
+                it in our view function while the 'id' attribute is the way that we can 
+                identify it on the page to apply its label CSS  
+                <input type="text" id="id_name" name="item_name" />
+            </p>
+        </div>
+        <div>
+            <p>
+                <label for="done">Done:</label> -->
+                <!-- The 'name' attribute of this input tag is the name we'll use to access
+                it in our view function while the 'id' attribute is the way that we can 
+                identify it on the page to apply its label CSS  
+                <input type="checkbox" id="id_done" name="done" />
+            </p>
+        </div> -->
+        <div>
+            <p> 
+                <button type="submit">Update Item</button>
+            </p>
+        </div>
+    </form>
+</body>
+</html>

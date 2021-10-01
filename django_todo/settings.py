@@ -18,6 +18,11 @@ import os
 from pathlib import Path
 import dj_database_url
 
+# What this means is that if there's an environment variable called
+# 'DEVELOPMENT' in the environment, this variable will be set to its
+# value otherwise, it'll be false.
+development = os.environ.get('DEVELOPMENT', False)
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -29,9 +34,17 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-%0k0vv!#keivx!76zklcv9*!_a^29j$7sdlp_-^#xy_sj%$4$_')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# This means that 'DEBUG' wll be true in development & false on Heroku
+# so that if there's an error on Heroku, no internal source code will
+# be exposed on the error page.
+DEBUG = development
 
-ALLOWED_HOSTS = [os.environ.get('HEROKU_HOSTNAME')]
+# We'll use our 'development' variable again to say if it's true, we want
+# to use localhost as our allowed host otherwise, use the Heroku hostname
+if development:
+    ALLOWED_HOSTS = ['localhost']
+else:
+    ALLOWED_HOSTS = [os.environ.get('HEROKU_HOSTNAME')]
 
 
 # Application definition
@@ -82,16 +95,17 @@ WSGI_APPLICATION = 'django_todo.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-
-DATABASES = {
-    'default': dj_database_url.parse(os.environ.get('DATABASE_URL'))
-}
+if development:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
+else:
+    DATABASES = {
+        'default': dj_database_url.parse(os.environ.get('DATABASE_URL'))
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
